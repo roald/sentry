@@ -29,7 +29,7 @@ class Sentry_Install
 	public function up()
 	{
 		// Create user table
-		Schema::table(Config::get('sentry::sentry.table.users'), function($table) {
+		/*Schema::table(Config::get('sentry::sentry.table.users'), function($table) {
 			$table->on(Config::get('sentry::sentry.db_instance'));
 			$table->create();
 			$table->increments('id')->unsigned();
@@ -46,6 +46,19 @@ class Sentry_Install
 			$table->text('permissions');
 			$table->timestamp('last_login');
 			$table->timestamps();
+		});*/
+		
+		// Alternative user table manipulations within IdeeDropper
+		Schema::table(Config::get('sentry::sentry.table.users'), function($table) {
+			$table->string('password_reset_hash');
+			$table->string('temp_password');
+			$table->string('remember_me');
+			$table->string('activation_hash');
+			$table->string('ip_address');
+			$table->string('status');
+			$table->string('activated');
+			$table->text('permissions');
+			$table->timestamp('last_login');
 		});
 
 		// Create user metadata table
@@ -96,9 +109,14 @@ class Sentry_Install
 	public function down()
 	{
 		// Drop all tables
-		Schema::table(Config::get('sentry::sentry.table.users'), function($table) {
+		/*Schema::table(Config::get('sentry::sentry.table.users'), function($table) {
 			$table->on(Config::get('sentry::sentry.db_instance'));
 			$table->drop();
+		});*/
+
+		// Altered for IdeeDropper
+		Schema::table(Config::get('sentry::sentry.table.users'), function($table) {
+			$table->drop_column(array('password_reset_hash', 'temp_password', 'remember_me', 'activation_hash', 'ip_address', 'status', 'activated', 'permissions', 'last_login'));
 		});
 
 		Schema::table(Config::get('sentry::sentry.table.users_metadata'), function($table) {

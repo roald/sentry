@@ -32,11 +32,11 @@ return array(
 	 */
 	'table' => array(
 		'users'           => 'users',
-		'groups'          => 'groups',
-		'users_groups'    => 'users_groups',
+		'groups'          => 'roles',
+		'users_groups'    => 'users_roles',
 		'users_metadata'  => 'users_metadata',
 		'users_suspended' => 'users_suspended',
-		'rules'           => 'rules',
+		'rules'           => 'permissions',
 	),
 
 	/*
