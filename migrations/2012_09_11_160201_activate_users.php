@@ -18,11 +18,8 @@ class Sentry_Activate_Users {
 		foreach ($users as $user) {
 			$user->activated = 1;
 			$user->status = 1;
-
-			$salt = Str::random(16);
-			$password = "idd-". $user->username;
-			$password = $salt . hash('sha256', $salt.$password);
-			$user->password = $password;
+			$salt = Str::random('16');
+			$user->password = $salt.hash('sha256', $salt.'idd-'.$user->username);
 
 			$user->save();
 
@@ -47,7 +44,6 @@ class Sentry_Activate_Users {
 	 */
 	public function down()
 	{
-		//
 	}
 
 }
