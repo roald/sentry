@@ -43,8 +43,8 @@ return array(
 	 * Session keys
 	 */
 	'session' => array(
-		'user'     => 'sentry_user',
-		'provider' => 'sentry_provider',
+		'user'     => 'idd_user',
+		'provider' => 'idd_provider',
 	),
 
 	/*
@@ -60,7 +60,7 @@ return array(
 		/**
 		 * Cookie name credentials are stored in
 		 */
-		'cookie_name' => 'sentry_rm',
+		'cookie_name' => 'idd_rm',
 
 		/**
 		 * How long the cookie should last. (seconds)
