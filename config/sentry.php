@@ -195,7 +195,7 @@ return array(
 			/**
 			 * config samples.
 			 *
-			 *	'application::admin@dashboard',
+			 *	'application::post@post_create',
 			 *	'user::admin@create',
 			 *	'user::admin@read',
 			 *	'blog::admin@delete',
