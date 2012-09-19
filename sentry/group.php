@@ -49,6 +49,11 @@ class Sentry_Group implements \Iterator, \ArrayAccess
 	protected static $join_table = '';
 
 	/**
+	 * @var  string  Group identifier
+	 */
+	protected static $group_identifier = null;
+
+	/**
 	 * @var  array  Group array
 	 */
 	protected $group = array();
@@ -69,6 +74,8 @@ class Sentry_Group implements \Iterator, \ArrayAccess
 		static::$table = strtolower(Config::get('sentry::sentry.table.groups'));
 		static::$join_table = strtolower(Config::get('sentry::sentry.table.users_groups'));
 		$db_instance = trim(Config::get('sentry::sentry.db_instance'));
+		
+		static::$group_identifier = strtolower(Config::get('sentry::sentry.identifiers.group_id'));
 
 		// db_instance check
 		if ( ! empty($db_instance) )
@@ -213,7 +220,7 @@ class Sentry_Group implements \Iterator, \ArrayAccess
 			// delete users groups
 			$delete_user_groups = DB::connection(static::$db_instance)
 				->table(static::$join_table)
-				->where('group_id', '=', $this->group['id'])
+				->where(static::$group_identifier, '=', $this->group['id'])
 				->delete();
 
 			// delete GROUP
@@ -329,7 +336,7 @@ class Sentry_Group implements \Iterator, \ArrayAccess
 
 		$users = DB::connection(static::$db_instance)
 			->table($users_table)
-			->where(static::$join_table.'.group_id', '=', $this->group['id'])
+			->where(static::$join_table.'.'. static::$group_identifier, '=', $this->group['id'])
 			->join(static::$join_table,
 						static::$join_table.'.user_id', '=', $users_table.'.id')
 			->get($users_table.'.*');

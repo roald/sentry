@@ -84,7 +84,7 @@ class Sentry_Install
 			$table->on(Config::get('sentry::sentry.db_instance'));
 			$table->create();
 			$table->integer('user_id')->unsigned();
-			$table->integer('group_id')->unsigned();
+			$table->integer(Config::get('sentry::sentry.identifiers.group_id'))->unsigned();
 		});
 
 		// Create suspension table

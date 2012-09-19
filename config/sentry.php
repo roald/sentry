@@ -40,6 +40,13 @@ return array(
 	),
 
 	/*
+	 * Table Identifiers
+	 */
+	'identifiers' => array(
+		'group_id' => 'role_id',
+	),
+
+	/*
 	 * Session keys
 	 */
 	'session' => array(

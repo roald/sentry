@@ -98,6 +98,11 @@ class Sentry_User implements \Iterator, \ArrayAccess
 	protected $login_column_str = '';
 
 	/**
+	 * @var  string  Group identifier
+	 */
+	protected $group_identifier = null;
+
+	/**
 	 * @var  array  Contains the merged user & group permissions
 	 */
 	protected $permissions = array();
@@ -123,6 +128,9 @@ class Sentry_User implements \Iterator, \ArrayAccess
 		$this->login_column = strtolower(Config::get('sentry::sentry.login_column'));
 		$this->login_column_str = ucfirst($this->login_column);
 		$db_instance = trim(Config::get('sentry::sentry.db_instance'));
+
+		// additional identifiers
+		$this->group_identifier = strtolower(Config::get('sentry::sentry.identifiers.group_id'));
 
 		try
 		{
@@ -208,7 +216,7 @@ class Sentry_User implements \Iterator, \ArrayAccess
 				->table($groups_table)
 				->where($this->table_usergroups.'.user_id', '=', $this->user['id'])
 				->join($this->table_usergroups,
-							$this->table_usergroups.'.group_id', '=', $groups_table.'.id')
+							$this->table_usergroups.'.'.$this->group_identifier, '=', $groups_table.'.id')
 				->get($groups_table.'.*');
 
 			foreach ($groups as &$group)
@@ -818,7 +826,7 @@ class Sentry_User implements \Iterator, \ArrayAccess
 			->table($this->table_usergroups)
 			->insert_get_id(array(
 				'user_id' => $this->user['id'],
-				'group_id' => $group->get('id'),
+				$this->group_identifier => $group->get('id'),
 			));
 
 		$this->groups[] = array(
@@ -861,7 +869,7 @@ class Sentry_User implements \Iterator, \ArrayAccess
 		$delete = DB::connection($this->db_instance)
 			->table($this->table_usergroups)
 			->where('user_id', '=', $this->user['id'])
-			->where('group_id', '=', $group->get('id'))
+			->where($this->group_identifier, '=', $group->get('id'))
 			->delete();
 
 		// remove from array
